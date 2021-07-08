@@ -1,0 +1,98 @@
+% !TeX program = pdflatex
+\documentclass[12pt,a4paper,sans]{moderncv}
+
+\makeatletter
+\newlength{\thefontsize}
+\setlength{\thefontsize}{\f@size pt}
+\makeatother
+\newcommand{\iconlink}[3]{\href{#1}{\includegraphics[height=#3\thefontsize]{#2}}}
+\newcommand{\github}[1]{\iconlink{https://github.com/#1}{github}{0.75}}
+\newcommand{\gitlab}[1]{\iconlink{https://gitlab.com/#1}{gitlab}{0.75}}
+\newcommand{\youtube}[1]{\iconlink{https://www.youtube.com/watch?v=#1}{youtube}{0.8}}
+\newcommand{\extref}[1]{\iconlink{#1}{external}{0.75}}
+\newcommand{\itref}[2]{\href{#1}{\textit{#2}}}
+
+\usepackage[UKenglish]{babel}
+\usepackage[UKenglish]{isodate}
+\cleanlookdateon
+
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage[backend=biber, sorting=ydnt, defernumbers=true]{biblatex}
+\addbibresource{pub.bib}
+\DeclareSourcemap{
+	\maps[datatype=bibtex]{
+		\map{
+			\step[fieldsource=extref]
+			\step[fieldset=usera,origfieldval]
+		}
+		\map{
+			\step[fieldsource=youtube]
+			\step[fieldset=userb,origfieldval]
+		}
+		\map{
+			\step[fieldsource=github]
+			\step[fieldset=userc,origfieldval]
+		}
+		\map{
+			\step[fieldsource=gitlab]
+			\step[fieldset=userd,origfieldval]
+		}
+	}
+}
+\DeclareFieldFormat{usera}{\extref{#1}}
+\DeclareFieldFormat{userb}{\youtube{#1}}
+\DeclareFieldFormat{userc}{\github{#1}}
+\DeclareFieldFormat{userd}{\gitlab{#1}}
+\AtEveryBibitem{
+	\csappto{blx@bbx@\thefield{entrytype}}{
+		\iffieldundef{userc}
+			{}
+			{\space\printfield{userc}}
+		\iffieldundef{userd}
+			{}
+			{\space\printfield{userd}}
+		\iffieldundef{usera}
+			{}
+			{\space\printfield{usera}}
+		\iffieldundef{userb}
+			{}
+			{\space\printfield{userb}}
+	}
+}
+
+\moderncvstyle{classic}
+\moderncvcolor{blue}
+
+% personal data
+\name{Marco}{Tiraboschi}
+\email{marcotiraboschi@hotmail.it}
+\social[linkedin]{marco-tiraboschi-975930b1}
+\photo[64pt][0.4pt]{picture}
+
+\usepackage[unicode]{hyperref}
+\hypersetup{
+	breaklinks,
+	colorlinks=true,
+	linkcolor=cyan,
+	filecolor=cyan,
+	urlcolor=cyan,
+}
+
+\begin{document}
+\makecvtitle
+
+\input{tex/edu.tex}
+\input{tex/wrk.tex}
+\input{tex/ths.tex}\newpage
+\input{tex/pub.tex}
+\input{tex/msc.tex}
+
+\vfill
+\begin{flushright}\color{gray}
+Last updated on \today\\
+View my updated r\'esum\'e at \href{https://chromaticisobar.github.io/cv/}{chromaticisobar.github.io/cv}
+\end{flushright}
+
+\end{document}
+\grid

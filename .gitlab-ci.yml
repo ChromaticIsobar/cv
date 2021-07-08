@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy
+
+pdf:
+  image: chromaticisobar/pytex
+  stage: build
+  before_script:
+     - wget https://www.dropbox.com/s/v3jj5m8a0c42edc/github.pdf
+     - wget https://gitlab.com/assets/favicon-7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e.png -O gitlab.png
+     - wget https://www.dropbox.com/s/qtxy393y6u64lw0/picture.jpg
+     - wget https://www.dropbox.com/s/gdrf2iusk0wuuua/youtube.png
+     - wget https://www.brandeps.com/icon-download/S/Share-square-outlined-01.eps -O external.eps
+  script:
+     - for i in 1 2 3 ; do pdflatex main.tex && biber main ; done
+  artifacts:
+    paths:
+     - main.pdf
+
+pages:
+  image: chromaticisobar/make
+  stage: deploy
+  script:
+     - mkdir public
+     - echo "<!DOCTYPE html><html><body><script>window.location.href = \"main.pdf\"</script></body></html>" > public/index.html
+     - cp main.pdf public/main.pdf
+  dependencies:
+     - pdf
+  artifacts:
+    paths:
+     - public
+  only:
+     - master
